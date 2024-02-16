@@ -36,11 +36,11 @@ function hideButtons() {
   document.getElementById("button1").style.display = "none";
   document.getElementById("button2").style.display = "none";
  
-  // Simulate some task
+// Simulate some task
   setTimeout(function() {
     console.log("Task done!");
     
-   // Call the function to create buttons after the task is done
+// Call the function to create buttons after the task is done
     createButtons();
 }, 1000); // Simulated delay of 2 seconds
 }
