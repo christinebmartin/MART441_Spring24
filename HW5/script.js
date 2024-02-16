@@ -1,7 +1,6 @@
 //Confirm javascript is being executed
 console.log("Script loaded!");
 
-document.addEventListener("DOMContentLoaded", function() {
 
 // Create array for blank images and actual images
 var blankImages = [];
@@ -43,5 +42,5 @@ function revealImage(element) {
     element.src = actualImages[index];
 
 }
-});
+
  
