@@ -1,0 +1,38 @@
+/* Style for the image grid */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 100px); /* 4 columns */
+    grid-gap: 80px;
+    padding: 30px;
+    border-style: solid;
+    background-color: bisque;
+    border-color: #70002e;
+    border-width: 4px;
+    justify-content: center; /*justify the grid to the center */
+}
+
+.image-grid img {
+width: 100px;
+height: 100px;
+cursor: pointer; /*change cursor to a pointer*/
+border: 4px solid black;
+}
+
+/*style h1 */
+h1 {
+    color: #70002e;
+    font-family: verdana;
+    text-align: center;
+}
+
+body {
+    background-color: bisque;
+}
+
+/*Style Griz logo on last page */
+.grizLogo {
+    float: right;
+    width: 100px;
+    height:auto;
+    border-radius: 50%;
+}
