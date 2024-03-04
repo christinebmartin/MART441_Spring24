@@ -1,0 +1,20 @@
+body {
+    background-color: blanchedalmond;
+}
+
+#art-image {
+    width:auto;
+    Height: 300px;
+}
+
+#art-display {
+    text-align: center;
+}
+
+button {
+    background-color:pink;
+    position: absolute;
+    left: 47%;  
+    transform: translateY(-50%);
+    
+}
