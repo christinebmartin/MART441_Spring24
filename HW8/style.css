@@ -1,0 +1,29 @@
+
+
+  .fadeImage {
+    width: 500px;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none; /* hide all fade images by default */
+  }
+  .fadeImage:first-of-type {
+    display: block; /* display the first fade image initially */
+  }
+
+  #wordContainer {
+    width: 300px;
+    height: 300px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color:darkmagenta;
+    position: absolute;
+  }
+
+  #shape {
+    width: 70px;
+    height: 70px;
+    background-color: skyblue;
+    position: absolute;
+  }

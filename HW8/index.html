@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playing with JQuery</title>
+
+  <!--Link to Style Sheet-->
+  <link rel="stylesheet" type="text/css" href="style.css">
+
+  <!-- Include jQuery from a CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+
+</head>
+
+<body>
+
+<!--create an array of 3 images-->
+<img class="fadeImage" src="Images/GlacierKali.jpg" alt="Glacier and Kali">
+<img class="fadeImage" src="Images/KaliPigs.jpg" alt="Kali and Pigs">
+<img class="fadeImage" src="Images/watchDog.jpg" alt="Kali watching the big dogs">
+<img class="fadeImage" src="Images/Glacier.jpeg" alt="Glacier">
+<img class="fadeImage" src="Images/sunsetFHV.jpg" alt="Sunset View From House">
+ 
+<!-- place for words-->
+<div id="wordContainer"></div>
+ 
+<!--place for shape-->
+<div id="shape"></div>
+
+<script>
+    //ready document for jQuery
+    $(document).ready(function() {
+
+var images = $(".fadeImage"); // Select all images
+var currentImageIndex = 0; // Initialize index of the current image
+var $shape = $('#shape'); 
+
+// Function to fade images in and out one at a time
+function fadeImages() {
+
+  // Fade out the current image
+  images.eq(currentImageIndex).fadeOut(1000, function() {
+    // Move to the next image
+    currentImageIndex = (currentImageIndex + 1) % images.length;
+    // Fade in the next image
+    images.eq(currentImageIndex).fadeIn(1000);
+  });
+}
+
+// Fade in the first image initially
+images.eq(currentImageIndex).fadeIn(1000);
+
+// Call fadeImages function repeatedly
+setInterval(fadeImages, 3000); // Change images every 3 seconds
+
+//function to animate the shape
+function animateShape() {
+
+    // Randomly position the shape
+        var newPositionTop = Math.random() * ($(window).height() - $shape.height());
+        var newPositionLeft = Math.random() * ($(window).width() - $shape.width());
+        $shape.css({
+            top: newPositionTop,
+            left: newPositionLeft
+            });
+
+    // Randomly fade the shape in and out
+        $shape.fadeIn(500).delay(1000).fadeOut(500, animateShape); //fade in and out shape
+        }
+
+// Start the animation
+animateShape(); // Start the shape animation
+});
+
+//Begin adding and animating words
+var words = ["Montana", "Success", "Big Sky", "Kalispell", "Flathead Lake", "Dalmation", "Dogs"]; // Array of words
+var currentIndex = 0;
+
+//function to move words container randomly
+function moveWord() {
+      // Generate random coordinates for the position within the window
+      var newPositionTop = Math.random() * ($(window).height() - $("#wordContainer").height());
+      var newPositionLeft = Math.random() * ($(window).width() - $("#wordContainer").width());
+
+      // Update the CSS top and left properties of the word container
+      $("#wordContainer").css({
+        top: newPositionTop,
+        left: newPositionLeft
+      });
+    }
+
+//function that will fade in new word with random font size
+function fadeInNextWord() {
+
+// Generate a random font size between 
+var randomFontSize = Math.floor(Math.random() * 100) + 100;
+$("#wordContainer").text(words[currentIndex]).css('font-size', randomFontSize + 'px').fadeIn(1000, function() {
+
+// Fade out after 3000 milliseconds (3 second)
+  $(this).fadeOut(2000, function() {
+
+// Increment index and check if it exceeds the array length
+    currentIndex = (currentIndex + 1) % words.length;
+    fadeInNextWord();  //run fadeInNextWord function
+  });
+
+
+});
+}
+
+// Start the animation
+fadeInNextWord();
+
+
+</script>
+</body>
+</html>
+
+
+
