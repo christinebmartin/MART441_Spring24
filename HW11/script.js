@@ -137,7 +137,7 @@ function animate() {
     userSquare.update(canvas);
     userSquare.draw(ctx);
 
-    // Update and draw the user-controlled square
+    // Update and draw the 3rd square
     square3.update(canvas);
     square3.draw(ctx);
   
