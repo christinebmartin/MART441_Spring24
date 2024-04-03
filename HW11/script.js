@@ -125,7 +125,7 @@ function animate() {
       // Reset background image and size if no collision
       canvas.style.backgroundImage = "none";
       canvas.style.backgroundSize = "auto";
-      canvas.style.backgroundRepeat = "repeat"; // Allow background image to repeat (if desired)
+      canvas.style.backgroundRepeat = "repeat"; // Allow background image to repeat
       canvas.style.backgroundPosition = "center"; // Center the background image
     }
   
