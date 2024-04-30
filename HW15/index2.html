@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Babylon.js sample code</title>
+
+        <!-- Babylon.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+        <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
+        <script src="https://cdn.babylonjs.com/recast.js"></script>
+        <script src="https://cdn.babylonjs.com/ammo.js"></script>
+        <script src="https://cdn.babylonjs.com/havok/HavokPhysics_umd.js"></script>
+        <script src="https://cdn.babylonjs.com/cannon.js"></script>
+        <script src="https://cdn.babylonjs.com/Oimo.js"></script>
+        <script src="https://cdn.babylonjs.com/earcut.min.js"></script>
+        <script src="https://cdn.babylonjs.com/babylon.js"></script>
+        <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+        <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+        <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+        <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+        <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+        <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+        <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+            
+            #canvasZone {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+<body>
+    <div id="canvasZone"><canvas id="renderCanvas"></canvas></div>
+    <script>
+        var canvas = document.getElementById("renderCanvas");
+
+        var startRenderLoop = function (engine, canvas) {
+            engine.runRenderLoop(function () {
+                if (sceneToRender && sceneToRender.activeCamera) {
+                    sceneToRender.render();
+                }
+            });
+        }
+
+        var engine = null;
+        var scene = null;
+        var sceneToRender = null;
+        var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
+        const createScene = function () {
+    const scene = new BABYLON.Scene(engine);
+
+    const camera = new BABYLON.ArcRotateCamera("camera", -Math.PI / 2, Math.PI / 2.5, 15, new BABYLON.Vector3(0, 0, 0));
+    camera.attachControl(canvas, true);
+    const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0)); 
+
+        // Import the meshes of both houses
+        BABYLON.SceneLoader.ImportMeshAsync(["ground", "semi_house"], "https://assets.babylonjs.com/meshes/", "both_houses_scene.babylon").then(function (result) {
+        
+        // Get the mesh of the house
+        const houseMesh = scene.getMeshByName("semi_house");
+
+        // Clone the house mesh to create additional houses
+        const additionalHouse1 = houseMesh.clone("semi_house_1");
+        const additionalHouse2 = houseMesh.clone("semi_house_2");
+        const additionalHouse3 = houseMesh.clone("semi_house_3");
+
+        // Position the additional houses
+        additionalHouse1.position = new BABYLON.Vector3(-2, 0, 0); // Set the position for the first additional house
+        additionalHouse2.position = new BABYLON.Vector3(1, 0, -4); // Set the position for the second additional house
+        additionalHouse3.position = new BABYLON.Vector3(-2, 0, -4); // Set the position for the third additional house
+    });
+
+    // Add a tree
+    const createTree = function () {
+        const engine = scene.getEngine();
+        const canvas = engine.getRenderingCanvas();
+
+        const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(1, 1, 0), scene);
+        light.intensity = 0.7;
+
+        const spot = new BABYLON.SpotLight("spot", new BABYLON.Vector3(25, 15, -10), new BABYLON.Vector3(-1, -0.8, 1), 15, 1, scene);
+        spot.diffuse = new BABYLON.Color3(1, 1, 1);
+        spot.specular = new BABYLON.Color3(0, 0, 0);
+        spot.intensity = 0.8;
+
+        const leafMaterial = new BABYLON.StandardMaterial("leafMaterial", scene);
+        leafMaterial.diffuseColor = new BABYLON.Color3(0.5, 1, 0.5);
+      
+        const woodMaterial = new BABYLON.StandardMaterial("wood", scene);
+        const woodTexture = new BABYLON.WoodProceduralTexture("woodtexture", 512, scene);
+        woodTexture.ampScale = 50;
+        woodMaterial.diffuseTexture = woodTexture;
+      
+        const QuickTreeGenerator = function(sizeBranch, sizeTrunk, radius, trunkMaterial, leafMaterial) {
+            const tree = new BABYLON.Mesh("tree", scene);
+
+            const leaves = BABYLON.MeshBuilder.CreateSphere("sphere", {segments: 2, diameter: sizeBranch})
+        console.log(leaves.getBoundingInfo().boundingSphere.radius);
+
+        const positions = leaves.getVerticesData(BABYLON.VertexBuffer.PositionKind);
+        const indices = leaves.getIndices();
+        const numberOfPoints = positions.length / 3;
+
+        const map = [];
+
+        // The higher point in the sphere
+        const v3 = BABYLON.Vector3;
+        const max = [];
+
+        for (let i = 0; i < numberOfPoints; i++) {
+            const p = new v3(positions[i*3], positions[i*3+1], positions[i*3+2]);
+
+            if (p.y >= sizeBranch/2) {
+                max.push(p);
+            }
+
+            let found = false;
+            for (let index = 0; index <map.length && !found; index++) {
+                const array = map[index];
+                const p0 = array[0];
+                if (p0.equals (p) || (p0.subtract(p)).lengthSquared() < 0.01){
+                    array.push(i * 3);
+                    found = true;
+                }
+            }
+            if (!found) {
+                let array = [];
+                array.push(p, i*3);
+                map.push(array);
+            }
+
+        }
+
+        const randomNumber = function (min, max) {
+            if (min == max) {
+                return (min);
+            }
+            const random = Math.random();
+            return ((random * (max - min)) + min);
+        };
+
+        map.forEach(function(array) {
+            const min = -sizeBranch/20; 
+            const max = sizeBranch/20;
+            const rx = randomNumber(min,max);
+            const ry = randomNumber(min,max);
+            const rz = randomNumber(min,max);
+
+            for (let index = 1; index < array.length; index++) {
+                const i = array[index];
+                positions[i] += rx;
+                positions[i+1] += ry;
+                positions[i+2] += rz;
+            }
+        });
+
+        leaves.setVerticesData(BABYLON.VertexBuffer.PositionKind, positions);
+        const normals = [];
+        BABYLON.VertexData.ComputeNormals(positions, indices, normals);
+        leaves.setVerticesData(BABYLON.VertexBuffer.NormalKind, normals);
+        leaves.convertToFlatShadedMesh();
+
+        leaves.material = leafMaterial;
+
+        const trunk = BABYLON.MeshBuilder.CreateCylinder("trunk", {height: sizeTrunk, diameterTop: radius-2<1?1:radius-2, diameterBottom: radius, tessellation: 10, subdivisions: 2});
+    
+        trunk.material = trunkMaterial;
+        trunk.convertToFlatShadedMesh();
+
+        leaves.parent = tree;
+        trunk.parent = tree;
+
+        leaves.position.y = (sizeTrunk + sizeBranch) / 2-2;
+
+            return tree;
+        };
+
+        const tree = QuickTreeGenerator(5, 5, 3, woodMaterial, leafMaterial);
+        tree.position = new BABYLON.Vector3(-1, 2.5, 3);
+    };
+
+    createTree(); // Call the function to create the tree
+
+    // Add built-in 'sphere' shape
+    // Create a material for the sphere
+    var sphereMaterial = new BABYLON.StandardMaterial("sphereMaterial", scene);
+    sphereMaterial.diffuseColor = new BABYLON.Color3(.85, 1, 0); // yellow color
+    
+    var sphere = BABYLON.MeshBuilder.CreateSphere("sphere", {diameter: 1.5, segments: 32}, scene);
+    sphere.position = new BABYLON.Vector3(3, -5, 3);
+
+    
+    // Assign the material to the sphere
+    sphere.material = sphereMaterial;
+
+    // Move the sphere upward 1/2 its height
+    sphere.position.y = 6;
+
+
+    return scene;
+};
+
+
+
+
+                window.initFunction = async function() {
+                    
+                    
+                    
+                    var asyncEngineCreation = async function() {
+                        try {
+                        return createDefaultEngine();
+                        } catch(e) {
+                        console.log("the available createEngine function failed. Creating the default engine instead");
+                        return createDefaultEngine();
+                        }
+                    }
+
+                    window.engine = await asyncEngineCreation();
+        if (!engine) throw 'engine should not be null.';
+        startRenderLoop(engine, canvas);
+        window.scene = createScene();};
+        initFunction().then(() => {sceneToRender = scene                    
+        });
+
+        // Resize
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+    </script>
+</body>
+</html>

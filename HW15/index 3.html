@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Babylon.js sample code</title>
+
+        <!-- Babylon.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+        <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
+        <script src="https://cdn.babylonjs.com/recast.js"></script>
+        <script src="https://cdn.babylonjs.com/ammo.js"></script>
+        <script src="https://cdn.babylonjs.com/havok/HavokPhysics_umd.js"></script>
+        <script src="https://cdn.babylonjs.com/cannon.js"></script>
+        <script src="https://cdn.babylonjs.com/Oimo.js"></script>
+        <script src="https://cdn.babylonjs.com/earcut.min.js"></script>
+        <script src="https://cdn.babylonjs.com/babylon.js"></script>
+        <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+        <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+        <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+        <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+        <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+        <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+        <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+            
+            #canvasZone {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+<body>
+    <div id="canvasZone"><canvas id="renderCanvas"></canvas></div>
+    <script>
+        var canvas = document.getElementById("renderCanvas");
+
+        var startRenderLoop = function (engine, canvas) {
+            engine.runRenderLoop(function () {
+                if (sceneToRender && sceneToRender.activeCamera) {
+                    sceneToRender.render();
+                }
+            });
+        }
+
+        var engine = null;
+        var scene = null;
+        var sceneToRender = null;
+        var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true,  disableWebGL2Support: false}); };
+        var createScene = function () {
+
+    // Creates a basic Babylon Scene object (non-mesh)
+    var scene = new BABYLON.Scene(engine);
+
+    // Creates and positions a free camera (non-mesh)
+    var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 5, -10), scene);
+
+    // Camera to scene origin
+    camera.setTarget(BABYLON.Vector3.Zero());
+
+    // Attach the camera to the canvas
+    camera.attachControl(canvas, true);
+
+    // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+    var light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+    // Default intensity is 1. Let's dim the light a small amount
+    light.intensity = 0.7;
+
+    // Create material for the box
+    var boxMaterial = new BABYLON.StandardMaterial("boxMaterial", scene);
+    boxMaterial.diffuseColor = new BABYLON.Color3(0, 1, 0); // Green color
+    var boxMaterial2 = new BABYLON.StandardMaterial("boxMaterial2", scene);
+    boxMaterial2.diffuseColor = new BABYLON.Color3(0.47, 0.09, 0.45); // Purple color
+
+    // Create material for the spheres
+    var sphere1Material = new BABYLON.StandardMaterial("sphere1Material", scene);
+    sphere1Material.diffuseColor = new BABYLON.Color3(1, 0, 0); // Red color
+
+    var sphere2Material = new BABYLON.StandardMaterial("sphere2Material", scene);
+    sphere2Material.diffuseColor = new BABYLON.Color3(0, 0, 1); // Blue color
+
+    var sphere3Material = new BABYLON.StandardMaterial("sphere3Material", scene);
+    sphere3Material.diffuseColor = new BABYLON.Color3(0.86, 0.97, 0.2); // Blue color
+
+    // Our built-in 'sphere' shape.
+    var sphere1 = BABYLON.MeshBuilder.CreateSphere("sphere1", { diameter: 2, segments: 32 }, scene);
+    sphere1.material = sphere1Material; // Assign material to the first sphere
+
+    // Move the first sphere upward 1/2 its height
+    sphere1.position.y = 1;
+
+    // Create a second sphere
+    var sphere2 = BABYLON.MeshBuilder.CreateSphere("sphere2", { diameter: 2, segments: 32 }, scene);
+    sphere2.material = sphere2Material; // Assign material to the second sphere
+
+    // Position the second sphere
+    sphere2.position = new BABYLON.Vector3(3, 1, 0); 
+
+    // Create a third sphere
+    var sphere3 = BABYLON.MeshBuilder.CreateSphere("sphere2", { diameter: 2, segments: 32 }, scene);
+    sphere3.material = sphere3Material; // Assign material to the second sphere
+
+    // Position the second sphere
+    sphere3.position = new BABYLON.Vector3(-3, 1, 0); 
+
+// Create a box
+    var box = BABYLON.MeshBuilder.CreateBox("box", { width: 1, height: 1, depth: 1 }, scene);
+    box.material = boxMaterial; // Assign material to the box
+    var box2 = BABYLON.MeshBuilder.CreateBox("box2", { width: 1, height: 1, depth: 1 }, scene);
+    box2.material = boxMaterial2; // Assign material to the box
+    
+    // Position the box
+    box.position = new BABYLON.Vector3(-1, 2, 3); 
+    box2.position = new BABYLON.Vector3(1, 2, 3); 
+
+
+    return scene;
+};
+
+                window.initFunction = async function() {
+                            
+                    var asyncEngineCreation = async function() {
+                        try {
+                        return createDefaultEngine();
+                        } catch(e) {
+                        console.log("the available createEngine function failed. Creating the default engine instead");
+                        return createDefaultEngine();
+                        }
+                    }
+
+                    window.engine = await asyncEngineCreation();
+        if (!engine) throw 'engine should not be null.';
+        startRenderLoop(engine, canvas);
+        window.scene = createScene();};
+        initFunction().then(() => {sceneToRender = scene                    
+        });
+
+        // Resize
+        window.addEventListener("resize", function () {
+            engine.resize();
+        });
+    </script>
+</body>
+</html>
