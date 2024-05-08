@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+<!-- Link to style sheet-->
+    <link rel="stylesheet" href="style2.css">
+
+ 
+<!-- Add page title-->
+    <title>To Do List</title>
+</head>
+ 
+<body>
+    <div class="container">
+       <div class="todo-app">
+            <h2>To Do List <img src="Images/icon.png" alt=""></h2> 
+            <h3><button class="printButton" onclick="printList()">Print List</button></h3>
+
+       
+       <div class="row">
+            <input type="text" id="input-box" placeholder="Add your task">
+
+<!-- Add task categories -->
+<div class="row">
+    <select id="category-select">
+        <option value="personal">Personal</option>
+        <option value="Work">Work</option>
+        <option value="School">School</option>
+        <option value="Shopping">Shopping</option>
+        <option value="none">Other</option>
+    </select>
+
+<!-- Priority dropdown menu -->
+    <select id="priority-select">
+        <option value="low">low</option>
+        <option value="Medium">Medium</option>
+        <option value="HIGH">HIGH</option>
+        </select>
+
+    <input type="date" id="due-date">
+
+    <button onclick="addTask()">Submit</button>
+</div>
+            
+       </div>
+<!-- Add image to re-sort by due date-->            
+    <img id="sort-date" src="Images/upDown.png" alt="Sort by Due Date">
+
+<!--Create place to enter task list-->
+       <ul id="list-container">
+       </ul>
+        </div>
+    </div>
+
+    <!-- Link to javascript file-->
+<script src="script2.js"></script>
+
+</body>
+ 
+</html>

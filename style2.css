@@ -1,0 +1,204 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    min-height: 100vh; 
+    background: linear-gradient(135deg, #ee9ca7 , #ffdde1);
+    padding: 10px;
+}
+
+.todo-app {
+    width: 130%;
+    max-width: 900px;
+    background: white;
+    margin: 100px auto 20px;
+    padding: 40px 30px 70px;
+    border-radius: 10px;
+}
+
+.todo-app h2 {
+    color: #002765;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.todo-app h2 img {
+    width: 30px;
+    margin-left: 10px;
+}
+
+/*Style task input */
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #edeef0;
+    border-radius: 300px;
+    padding-left: 20px;
+    margin-bottom: 25px;
+}
+
+input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 10px;
+}
+
+/*Style submit button */
+button {
+    border: none;
+    outline: none;
+    padding: 16px 50px;
+    background: #734b6d;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 40px;
+    margin-top: 15px;
+    margin-right: 10px;
+}
+
+/*style category drop down */
+#category-select {
+    position: relative; 
+    left: -100px; 
+    top: 10px; 
+    background: transparent;
+}
+
+/*Style due date drop down */
+#due-date {
+    position: relative;
+    left: 0px;
+    top: 10px;
+}
+
+#priority-select {
+    position: relative;
+    top: 10px;
+    background: transparent;
+}
+
+.priority {
+    position: static;
+}
+
+/* Style sort image */
+#sort-date {
+    width: 10px;
+    height: 10px;
+    margin-left: 90%;
+}
+
+.priority.high {
+    color: red;
+}
+
+
+.category{
+    color: black;
+    position:absolute;
+}
+
+.task {
+    position: relative;
+    margin: 5%;
+}
+
+.dueDate {
+    color: black;
+    float: right;
+    margin-right: 10px;
+}
+
+/* Add CSS to align close icon to the right */
+.close-icon {
+    float: right;
+    position: relative;
+}
+
+/* Add CSS for hover effect */
+.close-icon:hover::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px; /* Adjust size as needed */
+    height: 24px; /* Adjust size as needed */
+    background-color: rgba(0, 0, 0, 0.1); /* Light gray color */
+    border-radius: 50%; /* Create circle */
+    z-index: 1; /* Ensure the circle is above the icon */
+}
+
+.toggle-image {
+    height: 20px;
+    width: auto;
+    position:relative;
+    top: 5px;
+}
+
+/* CSS class to apply line-through style */
+.completed {
+    text-decoration: line-through;
+}
+
+/* Remove leading dot in the list */
+#list-container {
+    list-style-type: none;
+}
+
+.toggle-image {
+    border: 1px solid transparent; /* Initially set border to transparent */
+    border-radius: 50%; /* Ensures the border creates a circle */
+    transition: border-color 0.3s; /* Smooth transition for border color change */
+}
+
+/* Style the border when hovering */
+.toggle-image:hover {
+    border-color: lightgray; /* Light gray border color on hover */
+    width: 20px; /* Adjust size as needed */
+    height: 20px; /* Adjust size as needed */
+    background-color: rgba(0, 0, 0, 0.1); /* Light gray color */
+    border-radius: 50%; /* Create circle */
+    z-index:1;
+}
+
+/*Style print button */
+.printButton {
+    background-color: gainsboro;
+    color: black;
+    border: none;
+    outline: none;
+    padding: 16px 20px;
+    background: gainsboro;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 0px;
+    margin-top: -55px;
+    margin-right: 20px;
+    float: right;
+}
+
+@media print {
+    /* Hide unchecked and checked images when printing */
+    .toggle-image {
+        display: none;
+    }
+}
+
+.priority-image {
+    /* Add CSS styles for the exclam.png image */
+    width: 20px; /* Adjust width as needed */
+    height: 20px; /* Adjust height as needed */
+    margin-right: 5px; /* Adjust margin as needed */
+    vertical-align: middle; /* Align image vertically with text */
+}
